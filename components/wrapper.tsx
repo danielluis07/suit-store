@@ -1,12 +1,19 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+
 interface WrapperProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-export const Wrapper = ({ children }: WrapperProps) => {
+export const Wrapper = ({ children, className }: WrapperProps) => {
   return (
-    <div className="max-w-[1400px] mx-auto xl:p-20 md-10 sm:px-2 px-4 bg-milky">
+    <div
+      className={cn(
+        "max-w-[1400px] min-h-full mx-auto xl:p-20 sm:px-2 px-4 bg-milky",
+        className
+      )}>
       {children}
     </div>
   );

@@ -18,6 +18,12 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        sm1: "838px",
+        maxmd: { max: "768px" },
+        maxl: { max: "1280px" },
+        maxsm: { max: "640px" },
+      },
       colors: {
         border: "hsl(var(--border))",
         milky: "rgb(250 250 250)",
