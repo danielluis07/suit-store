@@ -14,20 +14,42 @@ import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ClipLoader } from "react-spinners";
+import { useQuery } from "@tanstack/react-query";
 
 interface WatchesGridProps {
   session: Session | null;
 }
 
 export const WatchesGrid = ({ session }: WatchesGridProps) => {
-  const [category, setCategory] = useState<Category | undefined>(undefined);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
   const router = useRouter();
   const wishList = useWishList();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const {
+    data: category,
+    error: categoryError,
+    isLoading: isLoadingCategory,
+  } = useQuery({
+    queryKey: ["category"],
+    queryFn: () => getCategory("2b6d3026-27e2-419a-8b55-160353b5a81d"),
+  });
+
+  const {
+    data: products,
+    error: productsError,
+    isLoading: isLoadingProducts,
+  } = useQuery({
+    queryKey: ["productsByCategory"],
+    queryFn: () =>
+      getProducts({
+        categoryId: "2b6d3026-27e2-419a-8b55-160353b5a81d",
+        isArchived: false,
+      }),
+  });
+
+  const isLoading = isLoadingProducts || isLoadingCategory;
+  const error = productsError || categoryError;
 
   const onAddToWishList = (product: Product) => {
     if (!session) {
@@ -42,35 +64,8 @@ export const WatchesGrid = ({ session }: WatchesGridProps) => {
     }
   };
 
-  useEffect(() => {
-    let isMounted = true;
-    setIsLoading(true);
-    const fetchProducts = async () => {
-      try {
-        const products = await getProducts({
-          categoryId: "2b6d3026-27e2-419a-8b55-160353b5a81d",
-        });
-        const category = await getCategory(
-          "2b6d3026-27e2-419a-8b55-160353b5a81d"
-        );
-        setProducts(products);
-        setCategory(category);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        setError("Houve um problema ao mostrar as informações");
-        setIsLoading(false);
-      }
-    };
-    fetchProducts();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
   const filteredProducts = useMemo(() => {
-    let filtered = [...products]; // Start with a copy of products to ensure immutability
+    let filtered = [...(products || [])]; // Start with a copy of products to ensure immutability
     const sortFilter = searchParams.get("sort");
 
     if (sortFilter) {
@@ -94,90 +89,85 @@ export const WatchesGrid = ({ session }: WatchesGridProps) => {
     } else {
       params.delete("sort");
     }
-    router.push(pathname + "?" + params, { scroll: false });
+    router.replace(pathname + "?" + params, { scroll: false });
   };
+
+  if (error)
+    return (
+      <div className="flex items-center justify-center h-[550px]">
+        Houve um problema ao carregar os produtos
+      </div>
+    );
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-[550px]">
+        <ClipLoader />
+      </div>
+    );
 
   return (
     <>
-      {error && <div className="text-2xl font-bold text-gray-300">{error}</div>}
-      {!error && isLoading && (
-        <div className="flex items-center justify-center h-full">
-          <ClipLoader />
-        </div>
-      )}
-      {!isLoading && !error && filteredProducts.length > 0 && (
-        <>
-          <div className="relative w-full h-[300px] 2xl:w-[1200px] 2xl:mx-auto">
-            <Image
-              src={category?.imageUrl ?? imagePlaceholder}
-              alt="sapatos"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1536px) 100%, 1200px"
-            />
-          </div>
-          <h1 className="py-14 font-bold underline text-2xl text-center">
-            {category?.name}
-          </h1>
-          {!isLoading && (
-            <div className="flex justify-center sm:justify-end w-full sm:w-11/12 mt-8">
-              <select
-                value={searchParams.get("sort") || ""}
-                onChange={(e) => handleSortChange(e.target.value)}>
-                <option value="">Organizar por</option>
-                <option value="highest">Maior Preço</option>
-                <option value="lowest">Menor Preço</option>
-              </select>
+      <div className="relative w-full h-[300px] 2xl:w-[1200px] 2xl:mx-auto">
+        <Image
+          src={category?.imageUrl ?? imagePlaceholder}
+          alt="sapatos"
+          fill
+          className="object-cover"
+          sizes="(max-width: 1536px) 100%, 1200px"
+        />
+      </div>
+      <h1 className="py-14 font-bold underline text-2xl text-center">
+        {category?.name}
+      </h1>
+      <div className="flex justify-center sm:justify-end w-full sm:w-11/12 mt-8">
+        <select
+          value={searchParams.get("sort") || ""}
+          onChange={(e) => handleSortChange(e.target.value)}>
+          <option value="">Organizar por</option>
+          <option value="highest">Maior Preço</option>
+          <option value="lowest">Menor Preço</option>
+        </select>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 w-11/12 mx-auto mt-20">
+        {filteredProducts.map((item, index) => (
+          <Card className="mx-auto w-64 xl:w-56 group" key={index}>
+            <div className="relative w-full h-72">
+              {item.images[0].url && (
+                <div className="absolute hidden group-hover:flex w-full justify-end z-10 pt-[5px] px-[5px]">
+                  <div className="bg-milky p-2 rounded-full cursor-pointer">
+                    <Heart
+                      width={24}
+                      height={24}
+                      active={wishList.isProductInWishList(item.id)}
+                      onClick={() => onAddToWishList(item)}
+                    />
+                  </div>
+                </div>
+              )}
+              <Image
+                src={item.images[0].url ? item.images[0].url : imagePlaceholder}
+                fill
+                alt="produto"
+                className="w-full h-full object-cover"
+                sizes="(max-width: 1280px) 224px, 256px"
+              />
             </div>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 w-11/12 mx-auto mt-20">
-            {filteredProducts.map((item, index) => (
-              <Card className="mx-auto w-64 xl:w-56 group" key={index}>
-                <div className="relative w-full h-72">
-                  {item.images[0].url && (
-                    <div className="absolute hidden group-hover:flex w-full justify-end z-10 pt-[5px] px-[5px]">
-                      <div className="bg-milky p-2 rounded-full cursor-pointer">
-                        <Heart
-                          width={24}
-                          height={24}
-                          active={wishList.isProductInWishList(item.id)}
-                          onClick={() => onAddToWishList(item)}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  <Image
-                    src={
-                      item.images[0].url ? item.images[0].url : imagePlaceholder
-                    }
-                    fill
-                    alt="produto"
-                    className="w-full h-full object-cover"
-                    sizes="(max-width: 1280px) 224px, 256px"
-                  />
-                </div>
-                <div className="flex flex-col p-4 space-y-3">
-                  <p className="line-clamp-2 text-center">{item.name}</p>
-                  <span className="text-center">
-                    {convertCentsToReal(item.price)}
-                  </span>
-                  <Button
-                    onClick={() => {
-                      router.push(`/product/${item.id}`);
-                    }}>
-                    Ver Detalhes
-                  </Button>
-                </div>
-              </Card>
-            ))}
-            {!isLoading && !error && !filteredProducts && (
-              <div className="flex w-full h-1/2 justify-center items-center">
-                Não há produtos disponíveis ainda
-              </div>
-            )}
-          </div>
-        </>
-      )}
+            <div className="flex flex-col p-4 space-y-3">
+              <p className="line-clamp-2 text-center">{item.name}</p>
+              <span className="text-center">
+                {convertCentsToReal(item.price)}
+              </span>
+              <Button
+                onClick={() => {
+                  router.push(`/product/${item.id}`);
+                }}>
+                Ver Detalhes
+              </Button>
+            </div>
+          </Card>
+        ))}
+      </div>
     </>
   );
 };

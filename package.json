@@ -21,6 +21,8 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@react-sandbox/heart": "^1.1.0",
+    "@tanstack/react-query": "^5.32.0",
+    "@tanstack/react-query-devtools": "^5.32.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/lodash": "^4.17.0",
     "@types/react-transition-group": "^4.4.10",
@@ -55,6 +57,7 @@
     "zustand": "^4.5.1"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.28.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

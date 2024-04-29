@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { getProducts } from "@/actions/get-data/get-products";
+import QueryProvider from "@/providers/query-provider";
 
 const playfar_display = Playfair_Display({ subsets: ["latin"] });
 
@@ -37,10 +38,12 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className={`${playfar_display.className} bg-black`}>
-          <Toaster />
-          <Navbar session={session} user={user} products={allProducts} />
-          {children}
-          <Footer />
+          <QueryProvider>
+            <Toaster />
+            <Navbar session={session} user={user} products={allProducts} />
+            {children}
+            <Footer />
+          </QueryProvider>
         </body>
       </html>
     </SessionProvider>
