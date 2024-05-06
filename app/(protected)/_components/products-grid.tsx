@@ -131,14 +131,14 @@ export const ProductsGrid = ({ session }: ProductsGridProps) => {
 
   if (error)
     return (
-      <div className="flex items-center justify-center h-full text-xl">
+      <div className="flex items-center justify-center h-screen text-xl">
         Houve um problema ao carregar os produtos
       </div>
     );
 
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center h-screen">
         <ClipLoader />
       </div>
     );
@@ -178,7 +178,7 @@ export const ProductsGrid = ({ session }: ProductsGridProps) => {
             </div>
           ))}
         </div>
-        {!isLoading && (
+        {!isLoading && filteredProducts.length > 0 && (
           <div className="flex justify-center sm:justify-end w-full sm:w-11/12 mt-8">
             <select
               value={searchParams.get("sort") || ""}

@@ -149,7 +149,7 @@ export const ShoesGrid = ({ session }: ShoesGridProps) => {
                 src={item.images[0].url ? item.images[0].url : imagePlaceholder}
                 fill
                 alt="produto"
-                className="w-full h-full object-cover"
+                className="object-cover"
                 sizes="(max-width: 1280px) 224px, 256px"
               />
             </div>

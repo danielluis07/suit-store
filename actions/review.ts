@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 export const review = async (
   values: z.infer<typeof ReviewSchema>,
   productId: string,
-  userId: string
+  userId: string | undefined
 ) => {
   const validatedFields = ReviewSchema.safeParse(values);
 
@@ -26,8 +26,6 @@ export const review = async (
     productId,
     userId,
   };
-
-  console.log(reviewData);
 
   try {
     const res = await fetch(`${baseUrl}/reviews`, {

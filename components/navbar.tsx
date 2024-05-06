@@ -197,21 +197,19 @@ export const Navbar = ({ session, user, products }: NavbarProps) => {
               "maxl:hidden space-x-3 md:space-x-10 cursor-pointer"
             )}>
             <div className="flex flex-col justify-between group">
-              INÍCIO
-              <span className="h-[2px] bg-black w-0 group-hover:w-full transition-all"></span>
-            </div>
-            <div
-              onClick={() => route.push("/products")}
-              className="flex flex-col justify-between group">
-              PRODUTOS
+              <Link href="/">INÍCIO</Link>
               <span className="h-[2px] bg-black w-0 group-hover:w-full transition-all"></span>
             </div>
             <div className="flex flex-col justify-between group">
-              SOBRE NÓS
+              <Link href="/products">PRODUTOS</Link>
               <span className="h-[2px] bg-black w-0 group-hover:w-full transition-all"></span>
             </div>
             <div className="flex flex-col justify-between group">
-              CONTATO
+              <Link href="/about">SOBRE NÓS</Link>
+              <span className="h-[2px] bg-black w-0 group-hover:w-full transition-all"></span>
+            </div>
+            <div className="flex flex-col justify-between group">
+              <Link href="/contact">CONTATO</Link>
               <span className="h-[2px] bg-black w-0 group-hover:w-full transition-all"></span>
             </div>
           </div>

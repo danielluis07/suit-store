@@ -10,6 +10,14 @@ datasource db {
   url  	    = env("DATABASE_URL")
 }
 
+enum NotificationType {
+  PURCHASE
+  REVIEW
+  REVIEW_REPLY
+  ORDER_UPDATE
+  PAYMENT_RECEIVED
+}
+
 model User {
   id                    String    @id @default(uuid())
   storeId               String
@@ -19,7 +27,7 @@ model User {
   password              String?
   imageUrl              String?
   imageName             String?
-  wishlists             Wishlist[]
+  notifications         Notification[]  // Relation to Notification model
   orders                Order[]   
   reviews               Review[]  @relation("UserToReview")
   twoFactorConfirmation TwoFactorConfirmation?
@@ -27,6 +35,13 @@ model User {
   accounts              Account[]
   image                 String?
   emailVerified         DateTime?
+  address1              String?
+  address2              String?
+  city                  String?
+  state                 String?
+  phone                 String?
+  postalCode            String?
+  country               String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 }
@@ -45,7 +60,6 @@ model Account {
   scope                 String?
   id_token              String?  @db.Text
   session_state         String?
-
   user                  User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   
 
@@ -110,7 +124,6 @@ model Product {
   categoryId            String          // Foreign Key to Category
   name                  String
   reviews               Review[]        @relation
-  wishlistItems         WishlistItem[]
   description           String          @db.VarChar(500)
   orderItems            OrderItem[]
   price                 Decimal
@@ -166,27 +179,19 @@ model ShippingMethod {
   @@index([name])
 }
 
-model Wishlist {
-  id                    String      @id @default(uuid())
-  name                  String
-  user                  User        @relation(fields: [userId], references: [id])
-  userId                String      // Foreign Key to the User model, representing the user who owns the wishlist
-  items                 WishlistItem[] // Relation to WishlistItem model
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
+model Notification {
+  id             String    @id @default(uuid())
+  type           NotificationType    // Type of notification (e.g., 'purchase', 'review_reply')
+  message        String    // Message content of the notification
+  myUserId       String?   // ID of the dashboard user (MyUser)
+  userId         String?   // ID of the web store user (User)
+  viewed         Boolean   @default(false) // Whether the notification has been viewed
+  createdAt      DateTime  @default(now()) // Timestamp of when the notification was created
+  updatedAt      DateTime  @updatedAt      // Timestamp of when the notification was last updated
 
+  // myUser         MyUser?   @relation(fields: [myUserId], references: [id], onDelete: SetNull)
+  user           User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // @@index([myUserId])
   @@index([userId])
-}
-
-model WishlistItem {
-  id                    String      @id @default(uuid())
-  wishlist              Wishlist    @relation(fields: [wishlistId], references: [id])
-  wishlistId            String      // Foreign Key to the Wishlist model, representing the wishlist that contains this item
-  product               Product     @relation(fields: [productId], references: [id])
-  productId             String      // Foreign Key to the Product model, representing the item added to the wishlist
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
-
-  @@index([wishlistId])
-  @@index([productId])
 }

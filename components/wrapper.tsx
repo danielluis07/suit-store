@@ -11,7 +11,7 @@ export const Wrapper = ({ children, className }: WrapperProps) => {
   return (
     <div
       className={cn(
-        "max-w-[1400px] min-h-full mx-auto xl:p-20 sm:px-2 px-4 bg-milky",
+        "max-w-[1400px] min-h-full mx-auto xl:p-20 sm:px-2 px-4 pb-4 bg-milky",
         className
       )}>
       {children}

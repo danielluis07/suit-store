@@ -8,10 +8,10 @@ export const ProductPageSkeleton = () => {
       <div className="flex flex-col lg:flex-row">
         {/* categories */}
         <div className="hidden lg:flex lg:flex-col gap-y-8 w-1/3 mt-8">
-          <Skeleton className="h-4 w-36" />
-          <Skeleton className="h-4 w-36" />
-          <Skeleton className="h-4 w-36" />
-          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-4 w-44" />
+          <Skeleton className="h-4 w-44" />
+          <Skeleton className="h-4 w-44" />
+          <Skeleton className="h-4 w-44" />
         </div>
         {/* product */}
         <div className="flex flex-col md:flex-row w-full">

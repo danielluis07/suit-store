@@ -40,9 +40,10 @@ export const Reviews = ({ productId, reviews, session }: ReviewProps) => {
   const [success, setSuccess] = useState<string | undefined>("");
   const user = useCurrentUser();
   const router = useRouter();
-  const userId = user?.id as string;
 
-  const alreadyReviewed = reviews.some((item) => item.userId === userId);
+  const alreadyReviewed = reviews.some(
+    (item) => item.userId === session?.user.id
+  );
 
   const productHasReview = reviews.some((item) => item.productId === productId);
 
@@ -62,13 +63,13 @@ export const Reviews = ({ productId, reviews, session }: ReviewProps) => {
       return;
     }
 
-    if (alreadyReviewed) {
+    /*     if (alreadyReviewed) {
       toast.error("Você já avaliou esse produto");
       return;
-    }
+    } */
 
     startTransition(() => {
-      review(values, productId, userId)
+      review(values, productId, session.user.id)
         .then((data) => {
           if (data?.error) {
             setError(data.error);

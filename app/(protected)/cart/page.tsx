@@ -12,7 +12,7 @@ const CartPage = async () => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper className="pt-32 xl:pt-36">
       <Cart id={id} />
     </Wrapper>
   );

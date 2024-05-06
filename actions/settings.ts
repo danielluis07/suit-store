@@ -29,8 +29,20 @@ export const settings = async (
     return { error: "Campos inválidos!" };
   }
 
-  const { username, imageUrl, imageName, isTwoFactorEnabled, email } =
-    validatedFields.data;
+  const {
+    username,
+    imageUrl,
+    imageName,
+    isTwoFactorEnabled,
+    email,
+    address1,
+    address2,
+    state,
+    city,
+    phone,
+    country,
+    postalCode,
+  } = validatedFields.data;
 
   const dbUser = await getUserById(user.id);
 
@@ -68,20 +80,16 @@ export const settings = async (
     userId,
     isTwoFactorEnabled,
     email,
+    address1,
+    address2,
+    state,
+    city,
+    phone,
+    country,
+    postalCode,
   };
 
   try {
-    await db.user.update({
-      where: { id: dbUser.id },
-      data: {
-        username,
-        imageUrl,
-        imageName,
-        email,
-        isTwoFactorEnabled,
-      },
-    });
-
     const res = await fetch(`${baseUrl}/users/${userId}`, {
       method: "PATCH",
       headers: {
@@ -96,6 +104,25 @@ export const settings = async (
 
     await res.json();
     console.log("User data successfully sent");
+
+    await db.user.update({
+      where: { id: dbUser.id },
+      data: {
+        username,
+        imageUrl,
+        imageName,
+        email,
+        isTwoFactorEnabled,
+        address1,
+        address2,
+        state,
+        city,
+        phone,
+        country,
+        postalCode,
+      },
+    });
+
     revalidatePath(`/config`);
   } catch (error) {
     console.log(error);

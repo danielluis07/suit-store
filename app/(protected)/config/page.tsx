@@ -12,18 +12,24 @@ const ConfigPage = async () => {
   });
 
   const initialData = {
-    username: user?.username as string | undefined,
-    imageUrl: user?.imageUrl as string | undefined,
-    imageName: user?.imageName as string | undefined,
+    username: user?.username ?? "",
+    imageUrl: user?.imageUrl ?? "",
+    imageName: user?.imageName ?? "",
+    address1: user?.address1 ?? "",
+    address2: user?.address2 ?? "",
+    city: user?.city ?? "",
+    phone: user?.phone ?? "",
+    postalCode: user?.postalCode ?? "",
+    isTwoFactorEnabled: user?.isTwoFactorEnabled,
+    country: user?.country ?? "",
+    state: user?.state ?? "",
   };
   return (
     <Wrapper>
-      <div className="pt-10 xl:pt-0">
-        <div className="mb-10 text-xl font-bold">Atualize suas informações</div>
-      </div>
-      <div>
-        <EditUserForm initialData={initialData} />
-      </div>
+      <h1 className="pt-36 pb-20 xl:pt-10 text-xl font-bold text-center underline">
+        Atualize suas informações
+      </h1>
+      <EditUserForm initialData={initialData} />
     </Wrapper>
   );
 };

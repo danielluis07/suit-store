@@ -19,7 +19,7 @@ export const Info = ({ data }: InfoProps) => {
   };
 
   return (
-    <div className="flex relative w-full lg:w-[580px]">
+    <div className="flex relative w-full lg:w-[580px] border border-slate-500">
       {/* Image */}
       <div className="relative w-[150px] h-[150px]">
         <Image
@@ -31,16 +31,17 @@ export const Info = ({ data }: InfoProps) => {
         />
       </div>
       {/* Info */}
-      <div className="w-full max-w-80 sm:max-w-full py-7 lg:py-4 px-1 space-y-1">
-        <p className="line-clamp-1">{data.name}</p>
-        <p>
-          Tamanho: <span>{data.size.value}</span>
+      <div className="w-full max-w-80 sm:max-w-full px-1 space-y-1">
+        <p className="line-clamp-1 font-bold text-xl">{data.name}</p>
+        <p className="font-bold">
+          Tamanho: <span className="font-normal">{data.size.value}</span>
         </p>
-        <p>
-          Preço <span>{convertCentsToReal(data.price)}</span>
+        <p className="font-bold">
+          Preço{" "}
+          <span className="font-normal">{convertCentsToReal(data.price)}</span>
         </p>
       </div>
-      <div onClick={onRemove} className="absolute right-0 h-min">
+      <div onClick={onRemove} className="absolute right-0 h-min cursor-pointer">
         <X />
       </div>
     </div>

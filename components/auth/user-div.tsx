@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "./user-avatar";
-import { LogoutButton } from "./logout-button";
 import { CiUser } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BsBoxSeam } from "react-icons/bs";
@@ -13,14 +12,18 @@ import { CiLogout } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { User } from "@prisma/client";
 import { Button } from "../ui/button";
+import { logout } from "@/actions/logout";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { ExitModal } from "@/modals/exit-modal";
+import { toast } from "sonner";
 
 interface UserDivProps {
   user: User | null;
 }
 
 export const UserDiv = ({ user }: UserDivProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const name = user?.username ? user.username : user?.name?.split(" ")[0];
 
@@ -42,8 +45,18 @@ export const UserDiv = ({ user }: UserDivProps) => {
     }
   };
 
+  const onClickExit = () => {
+    startTransition(() => {
+      logout().catch((error) => {
+        console.log(error);
+        toast.error("Ocorreu um erro ao tentar sair");
+      });
+    });
+  };
+
   return (
-    <>
+    <div>
+      <ExitModal exited={isPending} />
       {!user ? (
         <>
           <div className="hidden sm:flex">
@@ -109,7 +122,11 @@ export const UserDiv = ({ user }: UserDivProps) => {
                   </div>
                   <div className="flex items-center gap-x-2">
                     <CiLogout />
-                    <LogoutButton>Sair</LogoutButton>
+                    <span
+                      onClick={onClickExit}
+                      className="cursor-pointer hover:underline">
+                      Sair
+                    </span>
                   </div>
                 </div>
               </div>
@@ -148,7 +165,11 @@ export const UserDiv = ({ user }: UserDivProps) => {
                   </div>
                   <div className="flex items-center gap-x-2">
                     <CiLogout />
-                    <LogoutButton>Sair</LogoutButton>
+                    <span
+                      onClick={onClickExit}
+                      className="cursor-pointer hover:underline">
+                      Sair
+                    </span>
                   </div>
                 </div>
               </SheetContent>
@@ -156,6 +177,6 @@ export const UserDiv = ({ user }: UserDivProps) => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };

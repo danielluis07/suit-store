@@ -4,10 +4,32 @@ export const SettingsSchema = z.object({
   username: z.optional(z.string().min(1)),
   isTwoFactorEnabled: z.optional(z.boolean()),
   imageUrl: z.optional(z.string()),
-  imageName: z.optional(z.string().min(1)),
+  imageName: z.optional(z.string()),
   email: z.optional(z.string().email()),
   password: z.optional(z.string().min(6)),
   newPassword: z.optional(z.string().min(6)),
+  address1: z.optional(z.string()),
+  address2: z.optional(
+    z.string().regex(/^[^0-9]*$/, "Não é permitido inserir números")
+  ),
+  state: z.optional(
+    z.string().regex(/^[^0-9]*$/, "Não é permitido inserir números")
+  ),
+  city: z.optional(
+    z.string().regex(/^[^0-9]*$/, "Não é permitido inserir números")
+  ),
+  postalCode: z.optional(
+    z.string().regex(/^\d{5}-\d{3}$/, "O Cep precisa ser no formato 00000-000")
+  ),
+  country: z.optional(z.string()),
+  phone: z.optional(
+    z
+      .string()
+      .regex(
+        /^\(\d{2}\) \d{5}-\d{4}$/,
+        "O número precisa ser no formato (00) 00000-0000"
+      )
+  ),
 });
 
 export const UpdatePasswordSchema = z
