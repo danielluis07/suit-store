@@ -59,12 +59,23 @@ export interface TwoFactorConfirmation {
 
 export interface Order {
   id: string;
+  address1: string;
+  address2: string;
+  city: string;
+  country: string;
+  isRefunded: boolean;
+  isShipped: boolean;
+  number: number;
+  postalCode: string;
+  state: string;
+  status: string;
   storeId: string;
   store: Store;
   userId: string;
   user: User;
   orderItems: OrderItem[];
   isPaid: boolean;
+  shippingDate: string;
   shippingMethod: ShippingMethod;
   shippingMethodId: string;
   phone: string;

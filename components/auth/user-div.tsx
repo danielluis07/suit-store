@@ -16,6 +16,7 @@ import { logout } from "@/actions/logout";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ExitModal } from "@/modals/exit-modal";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface UserDivProps {
   user: User | null;
@@ -100,24 +101,20 @@ export const UserDiv = ({ user }: UserDivProps) => {
                   )}>
                   <div className="flex items-center gap-x-1">
                     <IoSettingsOutline />
-                    <div
-                      className="cursor-pointer hover:underline"
-                      onClick={() => router.push("/config")}>
-                      Configurações
+                    <div className="cursor-pointer hover:underline">
+                      <Link href="/config">Configurações</Link>
                     </div>
                   </div>
                   <div className="flex items-center gap-x-2">
                     <BsBoxSeam />
                     <div className="cursor-pointer hover:underline">
-                      Meus Pedidos
+                      <Link href="/orders">Meus Pedidos</Link>
                     </div>
                   </div>
                   <div className="flex items-center gap-x-2">
                     <BsBagHeart />
-                    <div
-                      className="cursor-pointer hover:underline"
-                      onClick={() => router.push("/wishlist")}>
-                      Lista de desejos
+                    <div className="cursor-pointer hover:underline">
+                      <Link href="/wishlist">Lista de desejos</Link>
                     </div>
                   </div>
                   <div className="flex items-center gap-x-2">

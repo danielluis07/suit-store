@@ -10,14 +10,6 @@ datasource db {
   url  	    = env("DATABASE_URL")
 }
 
-enum NotificationType {
-  PURCHASE
-  REVIEW
-  REVIEW_REPLY
-  ORDER_UPDATE
-  PAYMENT_RECEIVED
-}
-
 model User {
   id                    String    @id @default(uuid())
   storeId               String
@@ -27,9 +19,6 @@ model User {
   password              String?
   imageUrl              String?
   imageName             String?
-  notifications         Notification[]  // Relation to Notification model
-  orders                Order[]   
-  reviews               Review[]  @relation("UserToReview")
   twoFactorConfirmation TwoFactorConfirmation?
   isTwoFactorEnabled    Boolean @default(false)
   accounts              Account[]
@@ -99,99 +88,4 @@ model TwoFactorConfirmation {
   userId                String? @unique // Add @unique attribute to ensure uniqueness
 
   user                  User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-}
-
-model Review {
-  id                    String    @id @default(uuid())
-  storeId               String    @default("")
-  text                  String
-  rating                Float       // You can use a numeric value to represent the rating (e.g., 1 to 5 stars)
-  user                  User      @relation("UserToReview", fields: [userId], references: [id], onDelete: Cascade)
-  userId                String    // Foreign Key to the User model, representing the user who wrote the review
-  product               Product   @relation(fields: [productId], references: [id])
-  productId             String    // Foreign Key to the Product model, representing the reviewed product
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-
-  @@index([userId])
-  @@index([productId])
-}
-
-model Product {
-  id                    String          @id @default(uuid())
-  storeId               String          // Foreign Key to Store
-  categoryId            String          // Foreign Key to Category
-  name                  String
-  reviews               Review[]        @relation
-  description           String          @db.VarChar(500)
-  orderItems            OrderItem[]
-  price                 Decimal
-  sizeId                String?         // Foreign Key to Size
-  colorId               String          // Foreign Key to Color
-
-  @@index([storeId])
-  @@index([categoryId])
-  @@index([sizeId])
-  @@index([colorId])
-}
-
-model Order {
-  id                    String    @id @default(uuid())
-  storeId               String    // Foreign Key to Store
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id])
-  orderItems            OrderItem[] // Relation to OrderItem model
-  isPaid                Boolean   @default(false)
-  shippingMethod        ShippingMethod? @relation("ShippingMethodToOrder", fields: [shippingMethodId], references: [id])
-  shippingMethodId      String?      // Foreign Key to ShippingMethod model, representing the selected shipping method
-  phone                 String    @default("")
-  address               String    @default("")
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-
-  @@index([storeId])
-  @@index([userId])
-  @@index([shippingMethodId])
-}
-
-model OrderItem {
-  id                    String      @id @default(uuid())
-  orderId               String      // Foreign Key to Order
-  order                 Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId             String      // Foreign Key to Product
-  product               Product     @relation(fields: [productId], references: [id])
-  sizeIds               String
-
-  @@index([orderId])
-  @@index([productId])
-}
-
-model ShippingMethod {
-  id                    String    @id @default(uuid())
-  name                  String
-  estimatedTime         String    // Estimated delivery time for this shipping method
-  shippingCost          Float     // The cost of shipping for this method
-  orders                Order[]   @relation("ShippingMethodToOrder")
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-
-  @@index([name])
-}
-
-model Notification {
-  id             String    @id @default(uuid())
-  type           NotificationType    // Type of notification (e.g., 'purchase', 'review_reply')
-  message        String    // Message content of the notification
-  myUserId       String?   // ID of the dashboard user (MyUser)
-  userId         String?   // ID of the web store user (User)
-  viewed         Boolean   @default(false) // Whether the notification has been viewed
-  createdAt      DateTime  @default(now()) // Timestamp of when the notification was created
-  updatedAt      DateTime  @updatedAt      // Timestamp of when the notification was last updated
-
-  // myUser         MyUser?   @relation(fields: [myUserId], references: [id], onDelete: SetNull)
-  user           User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  // @@index([myUserId])
-  @@index([userId])
 }
