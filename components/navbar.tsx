@@ -101,9 +101,6 @@ export const Navbar = ({ session, user, products }: NavbarProps) => {
     }
   };
 
-  console.log(useCart.persist.getOptions().name);
-  console.log(useCart().items, "items");
-
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onChange}>
