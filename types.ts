@@ -9,7 +9,6 @@ export interface User {
   imageUrl?: string;
   firstName?: string;
   lastName?: string;
-  wishlists?: WishList[];
   orders?: Order[];
   reviews?: Review[];
 }
@@ -71,10 +70,13 @@ export interface Order {
   status: string;
   storeId: string;
   store: Store;
+  logisticStatus: string;
   userId: string;
+  trackId: string;
   user: User;
   orderItems: OrderItem[];
   isPaid: boolean;
+  paidAt: Date;
   shippingDate: string;
   shippingMethod: ShippingMethod;
   shippingMethodId: string;
@@ -100,7 +102,8 @@ export interface OrderItem {
   order: string;
   productId: string;
   product: Product;
-  sizeIds: string;
+  sizeId: string;
+  imageUrl: string;
   size: Size[];
 }
 
@@ -128,7 +131,6 @@ export interface Product {
   description: string;
   name: string;
   price: number;
-  wishlistItems: WishListItem[];
   isFeatured: boolean;
   isArchived: boolean;
   isNew: boolean;
@@ -154,7 +156,6 @@ export interface CartProduct {
   description: string;
   name: string;
   price: number;
-  wishlistItems: WishListItem[];
   isFeatured: boolean;
   isArchived: boolean;
   isNew: boolean;
@@ -257,26 +258,6 @@ export interface Color {
   name: string;
   value: string;
   products: Product[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface WishList {
-  id: string;
-  name: string;
-  user: User;
-  userId: string;
-  items: WishListItem[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface WishListItem {
-  id: string;
-  wishlist: WishList;
-  wishlistId: string;
-  product: Product;
-  productId: string;
   createdAt: string;
   updatedAt: string;
 }
