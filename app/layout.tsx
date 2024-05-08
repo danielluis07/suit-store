@@ -9,6 +9,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { getProducts } from "@/actions/get-data/get-products";
 import QueryProvider from "@/providers/query-provider";
+import { CartNameProvider } from "@/providers/cart-name-provider";
 
 const playfar_display = Playfair_Display({ subsets: ["latin"] });
 
@@ -40,9 +41,11 @@ export default async function RootLayout({
         <body className={`${playfar_display.className} bg-black`}>
           <QueryProvider>
             <Toaster />
-            <Navbar session={session} user={user} products={allProducts} />
-            {children}
-            <Footer />
+            <CartNameProvider session={session}>
+              <Navbar session={session} user={user} products={allProducts} />
+              {children}
+              <Footer />
+            </CartNameProvider>
           </QueryProvider>
         </body>
       </html>

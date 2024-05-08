@@ -19,6 +19,7 @@ import { Card } from "./ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { debounce } from "lodash";
 import { Dialog, DialogContent } from "./ui/dialog";
+import { useCart } from "@/hooks/use-cart";
 
 interface NavbarProps {
   session: Session | null;
@@ -100,11 +101,8 @@ export const Navbar = ({ session, user, products }: NavbarProps) => {
     }
   };
 
-  useEffect(() => {
-    if (!isOnFocus && inputRef.current) {
-      inputRef.current.blur();
-    }
-  }, [isOnFocus]);
+  console.log(useCart.persist.getOptions().name);
+  console.log(useCart().items, "items");
 
   return (
     <>
