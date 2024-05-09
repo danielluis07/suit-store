@@ -36,7 +36,7 @@ export const CartCard = ({ data }: CardCardProps) => {
           <p>Tamanho: {data.size.value}</p>
           <p>{convertCentsToReal(data.price)}</p>
         </div>
-        <div onClick={onRemove} className="absolute right-0">
+        <div onClick={onRemove} className="absolute right-0 cursor-pointer">
           <X />
         </div>
       </div>

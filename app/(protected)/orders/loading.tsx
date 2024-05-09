@@ -1,9 +1,10 @@
+import { OrdersPageSkeleton } from "@/components/skeletons/orders-page";
 import { Wrapper } from "@/components/wrapper";
 
 const Loading = () => {
   return (
-    <Wrapper>
-      <p>hi</p>
+    <Wrapper className="pt-32 xl:pt-36">
+      <OrdersPageSkeleton />
     </Wrapper>
   );
 };

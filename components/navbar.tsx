@@ -209,7 +209,7 @@ export const Navbar = ({ session, user, products }: NavbarProps) => {
             </div>
           </div>
           <div className="flex sm:hidden pl-3 w-11/12 justify-end">
-            <div className="mr-2" onClick={() => setIsOpen(true)}>
+            <div className="mr-4" onClick={() => setIsOpen(true)}>
               <IoIosSearch className="text-2xl" />
             </div>
             <div className="flex items-center space-x-5">

@@ -103,6 +103,8 @@ export interface OrderItem {
   productId: string;
   product: Product;
   sizeId: string;
+  sizeName: string;
+  sizeValue: string;
   imageUrl: string;
   size: Size[];
 }
