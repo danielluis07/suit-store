@@ -13,13 +13,12 @@ import imagePlaceholder from "@/public/image-placeholder.jpg";
 import { Product } from "@/types";
 import { Input } from "./ui/input";
 import { IoIosSearch } from "react-icons/io";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { cn, convertCentsToReal } from "@/lib/utils";
 import { Card } from "./ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { debounce } from "lodash";
 import { Dialog, DialogContent } from "./ui/dialog";
-import { useCart } from "@/hooks/use-cart";
 
 interface NavbarProps {
   session: Session | null;
@@ -89,7 +88,7 @@ export const Navbar = ({ session, user, products }: NavbarProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     setIsTyping(true);
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent the default Enter key behavior
+      event.preventDefault();
       const params = new URLSearchParams(searchParams);
       if (searchQuery) {
         params.set("query", searchQuery);
@@ -97,7 +96,7 @@ export const Navbar = ({ session, user, products }: NavbarProps) => {
         route.replace(`/search?${params.toString()}`);
       } else {
         params.delete("query");
-      } // Call your search submission function
+      }
     }
   };
 
