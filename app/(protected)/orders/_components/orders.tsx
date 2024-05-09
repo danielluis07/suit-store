@@ -2,7 +2,7 @@
 
 import { Order } from "@/types";
 import { format } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
+import { ptBR } from "date-fns/locale/pt-BR";
 import imagePlaceholder from "@/public/image-placeholder.jpg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
