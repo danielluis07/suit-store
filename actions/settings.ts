@@ -13,7 +13,7 @@ import { revalidatePath } from "next/cache";
 
 export const settings = async (
   values: z.infer<typeof SettingsSchema>,
-  userId: string
+  userId: string | undefined
 ) => {
   const user = await currentUser();
 

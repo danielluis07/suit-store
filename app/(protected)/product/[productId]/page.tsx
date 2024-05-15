@@ -1,5 +1,4 @@
 import { Wrapper } from "@/components/wrapper";
-import { CategoriesDiv } from "../../_components/categories-div";
 import { ProductDiv } from "../_components/product-div";
 import { ProductsCarousel } from "../../_components/products-carousel";
 import { getProducts } from "@/actions/get-data/get-products";
@@ -9,10 +8,12 @@ import { getReviewsByProduct } from "@/actions/get-data/get-reviews";
 import { auth } from "@/auth";
 
 const ProductPage = async ({ params }: { params: { productId: string } }) => {
-  const product = await getProduct(params.productId);
-  const reviews = await getReviewsByProduct({ productId: params.productId });
-  const newProducts = await getProducts({ isNew: true });
-  const session = await auth();
+  const [product, reviews, newProducts, session] = await Promise.all([
+    getProduct(params.productId),
+    getReviewsByProduct({ productId: params.productId }),
+    getProducts({ isNew: true }),
+    auth(),
+  ]);
 
   /* TODO: Related products, not new products */
 

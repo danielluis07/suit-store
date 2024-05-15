@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Category, Product } from "@/types";
+import { Product } from "@/types";
 import { convertCentsToReal } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Heart from "@react-sandbox/heart";
 import { useWishList } from "@/hooks/use-wishlist";
 import imagePlaceholder from "@/public/image-placeholder.jpg";
 import { Session } from "next-auth";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { getProducts } from "@/actions/get-data/get-products";
 import { getCategories } from "@/actions/get-data/get-categories";
 import { ClipLoader } from "react-spinners";

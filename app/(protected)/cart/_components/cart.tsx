@@ -9,14 +9,15 @@ import { toast } from "sonner";
 import { ClipLoader } from "react-spinners";
 import { convertCentsToReal } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { User } from "@prisma/client";
 
 interface CartProps {
-  id: string | null | undefined;
+  user: User | null;
 }
 
-export const Cart = ({ id }: CartProps) => {
+export const Cart = ({ user }: CartProps) => {
   const cart = useCart();
-  const userId = id;
+  const userId = user?.id;
   const items = useCart((state) => state.items);
   const removeAll = useCart((state) => state.removeAll);
   const searchParams = useSearchParams();
@@ -34,6 +35,20 @@ export const Cart = ({ id }: CartProps) => {
   }, [searchParams, removeAll]);
 
   const onCheckout = () => {
+    if (
+      !user?.address1 ||
+      !user?.address2 ||
+      !user?.city ||
+      !user?.country ||
+      !user?.phone ||
+      !user?.postalCode ||
+      !user?.state
+    ) {
+      toast.message(
+        "Antes de proceder, preencha seu endereço e telefone na tela de configurações"
+      );
+      return;
+    }
     setIsLoading(true);
     const productsForCheckout = items.map((product) => ({
       productId: product.id,

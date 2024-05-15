@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { signOut } from "@/auth";
 
-export const deleteUser = async (userId: string) => {
+export const deleteUser = async (userId: string | undefined) => {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL as string;
 
   if (!userId) {

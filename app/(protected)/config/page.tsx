@@ -29,7 +29,7 @@ const ConfigPage = async () => {
       <h1 className="pt-36 pb-20 xl:pt-10 text-xl font-bold text-center underline">
         Atualize suas informações
       </h1>
-      <EditUserForm initialData={initialData} />
+      <EditUserForm userId={userId} initialData={initialData} />
     </Wrapper>
   );
 };

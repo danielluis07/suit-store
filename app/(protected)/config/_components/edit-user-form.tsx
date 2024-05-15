@@ -28,6 +28,7 @@ import { UpdatePasswordForm } from "./update-password-form";
 import { Switch } from "@/components/ui/switch";
 
 interface EditUserFormProps {
+  userId: string | undefined;
   initialData?: {
     username: string | undefined;
     imageUrl: string | undefined;
@@ -37,14 +38,12 @@ interface EditUserFormProps {
 
 type EditUserFormValues = z.infer<typeof SettingsSchema>;
 
-export const EditUserForm = ({ initialData }: EditUserFormProps) => {
+export const EditUserForm = ({ userId, initialData }: EditUserFormProps) => {
   const [isPending, startTransition] = useTransition();
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [open, setOpen] = useState(false);
-  const user = useCurrentUser();
-  const userId = user?.id as string;
 
   const form = useForm<EditUserFormValues>({
     resolver: zodResolver(SettingsSchema),

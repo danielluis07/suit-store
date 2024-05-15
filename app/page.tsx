@@ -9,10 +9,13 @@ import { getProducts } from "@/actions/get-data/get-products";
 import { auth } from "@/auth";
 
 export default async function Home() {
-  const billboards = await getBillboards();
-  const featuredProducts = await getProducts({ isFeatured: true });
-  const newProducts = await getProducts({ isNew: true });
-  const session = await auth();
+  const [billboards, featuredProducts, newProducts, session] =
+    await Promise.all([
+      await getBillboards(),
+      await getProducts({ isFeatured: true }),
+      getProducts({ isNew: true }),
+      auth(),
+    ]);
 
   return (
     <div>
