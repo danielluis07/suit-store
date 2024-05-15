@@ -57,12 +57,12 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     }
     const data = await res.json();
     console.log("Registration successful", data);
-    const verificationToken = await generateVerificationToken(email);
+    /*     const verificationToken = await generateVerificationToken(email);
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token
     );
-    return { success: "Email de confirmação enviado!" };
+    return { success: "Email de confirmação enviado!" }; */
   } catch (error) {
     console.log("Registration error", error);
     return { error: "Erro ao realizar seu registro!" };

@@ -64,13 +64,14 @@ export const settings = async (
       return { error: "Esse email já está em uso!" };
     }
 
-    const verificationToken = await generateVerificationToken(values.email);
+    /*     const verificationToken = await generateVerificationToken(values.email);
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token
-    );
+    ); */
 
-    return { success: "Email de verificação enviado!" };
+    /*     return { success: "Email de verificação enviado!" }; */
+    return { success: "Email modificado com sucesso!" };
   }
 
   const userData = {

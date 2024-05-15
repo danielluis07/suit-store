@@ -19,11 +19,13 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "../form-success";
 import { register } from "@/actions/register";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -40,8 +42,12 @@ export const RegisterForm = () => {
 
     startTransition(() => {
       register(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        if (data?.error) {
+          setError(data?.error);
+        } else {
+          router.push("/auth/login");
+        }
+        /* setSuccess(data.success); */
       });
     });
   };
@@ -110,7 +116,7 @@ export const RegisterForm = () => {
             />
           </div>
           <FormError message={error} />
-          <FormSuccess message={success} />
+          {/* <FormSuccess message={success} /> */}
           <Button disabled={isPending} type="submit" className="w-full">
             Criar conta
           </Button>
