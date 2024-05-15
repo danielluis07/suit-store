@@ -13,6 +13,8 @@ export const checkout = async (
 ) => {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
+  const url = process.env.NEXT_PUBLIC_URL;
+
   if (!userId) {
     return { error: "Não há informações sobre o usuário!" };
   }
@@ -24,6 +26,7 @@ export const checkout = async (
   const checkOutData = {
     userId,
     products,
+    url,
   };
 
   try {
