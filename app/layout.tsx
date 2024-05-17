@@ -6,6 +6,7 @@ import { Footer } from "@/components/footer";
 import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { Analytics } from "@vercel/analytics/react";
 import { db } from "@/lib/db";
 import { getProducts } from "@/actions/get-data/get-products";
 import QueryProvider from "@/providers/query-provider";
@@ -44,6 +45,7 @@ export default async function RootLayout({
             <CartNameProvider session={session}>
               <Navbar session={session} user={user} products={allProducts} />
               {children}
+              <Analytics />
               <Footer />
             </CartNameProvider>
           </QueryProvider>
